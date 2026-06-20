@@ -1904,9 +1904,7 @@ def make_archive_designer_app(
         .field-grow {{ width: 1fr; height: auto; padding-right: 1; }}
         .field-small {{ width: 28; height: auto; }}
 
-        #panels {{ height: 1fr; background: {DUO['bg']}; }}
-        .col {{ width: 1fr; padding: 0 1; }}
-        .left-col {{ border-right: solid {DUO['border']}; }}
+        #panels {{ height: 1fr; padding: 0 1; background: {DUO['bg']}; }}
         .panel-body {{ border: round {DUO['bg']}; }}
         .panel-body:focus {{ border: round {DUO['cyan']}; }}
         .col-title {{
@@ -1996,15 +1994,10 @@ def make_archive_designer_app(
 
             yield Static(id="status-bar")
 
-            with Horizontal(id="panels"):
-                with Vertical(classes="col left-col"):
-                    yield Static("MATCHED  (volumes)", classes="col-title")
-                    with VerticalScroll(classes="panel-body"):
-                        yield Static(id="left-body")
-                with Vertical(classes="col"):
-                    yield Static("ARCHIVE  (filename)", classes="col-title")
-                    with VerticalScroll(classes="panel-body"):
-                        yield Static(id="right-body")
+            with Vertical(id="panels"):
+                yield Static("TO ARCHIVE  (volumes)", classes="col-title")
+                with VerticalScroll(classes="panel-body"):
+                    yield Static(id="left-body")
 
             yield Static(id="warn-box")
             yield Footer()
@@ -2120,36 +2113,45 @@ def make_archive_designer_app(
             matched, filt_re, filt_ok = self._matched()
             total = len(self.all_volumes)
 
-            left_lines: list[Text] = []
-            right_lines: list[Text] = []
-            for v in matched:
-                left_lines.append(styled_volume(
-                    v, "", USER_STYLE, USER_STYLE, SEL_STYLE, filt_re,
-                ))
-                tgt = render_template(v, self.template, self.when) \
-                    if self.template else "<empty template>"
-                right_lines.append(Text(tgt, style=USER_STYLE))
+            lines = [
+                styled_volume(v, "", USER_STYLE, USER_STYLE, SEL_STYLE, filt_re)
+                for v in matched
+            ]
 
-            status_bits: list[str] = []
+            # First status line: match count + workers.
             if not filt_ok:
-                status_bits.append(f"[{PASTEL['err']}]invalid SELECT regex[/]")
+                head = f"[{PASTEL['err']}]invalid SELECT regex[/]"
             else:
-                status_bits.append(
+                head = (
                     f"[{PASTEL['ok']}]{len(matched)}[/] of "
                     f"[{PASTEL['info']}]{total}[/] volumes match"
                 )
-            status_bits.append(
-                f"[{PASTEL['label']}]workers:[/] "
+            head += (
+                f"   [{PASTEL['label']}]workers:[/] "
                 f"[{PASTEL['title']}]{self.worker_count}[/]"
             )
-            status = Text.from_markup("  ".join(status_bits) or " ")
-            self.query_one("#status-bar", Static).update(status)
+
+            # Second line: a live example of the archive filename, so the user
+            # sees how the files will be named without a second panel.
+            if not self.template.strip():
+                example = f"[{PASTEL['err']}]<empty template>[/]"
+            else:
+                sample = matched[0] if matched else (
+                    self.all_volumes[0] if self.all_volumes else "volume")
+                example = (
+                    f"[{PASTEL['title']}]"
+                    f"{render_template(sample, self.template, self.when)}[/]"
+                )
+            second = (
+                f"[{PASTEL['label']}]archive files look like:[/]  {example}"
+            )
+
+            self.query_one("#status-bar", Static).update(
+                Text.from_markup(f"{head}\n{second}"))
 
             no_rows = Text("(no rows)", style=f"italic {DIM_STYLE}")
             self.query_one("#left-body", Static).update(
-                Group(*left_lines) if left_lines else no_rows)
-            self.query_one("#right-body", Static).update(
-                Group(*right_lines) if right_lines else no_rows)
+                Group(*lines) if lines else no_rows)
 
         def action_autocomplete(self) -> None:
             if self._warn_visible():
