@@ -1,7 +1,12 @@
-# docker-volume-migrator
+# docker-volume-toolkit
 
-A small command-line tool that copies Docker volumes from one name prefix to another. It
-matches every volume named `{from_prefix}{tail}` and copies it to
+[![PyPI version](https://img.shields.io/pypi/v/docker-volume-toolkit.svg)](https://pypi.org/project/docker-volume-toolkit/)
+[![Total PyPI downloads](https://static.pepy.tech/badge/docker-volume-toolkit)](https://pepy.tech/project/docker-volume-toolkit)
+[![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](https://www.python.org/downloads/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
+A small toolkit for Docker volumes. Its first command copies volumes from one name prefix
+to another - it matches every volume named `{from_prefix}{tail}` and copies it to
 `{to_prefix}{tail}`, preserving the tail (`_home`, `_workspace`, `_certs`, a
 per-user suffix, anything that follows the prefix). Run it from the host that
 owns the Docker volumes; it copies rather than renames, so the originals stay in
@@ -74,13 +79,21 @@ Or drive it entirely from the command line:
 - sources are left intact by default; after the run the tool prints the `docker volume rm` commands for every volume it copied so you can clean up once verified
 - the `--filter` regex matches the whole source name; note Docker encodes `.` in volume names as `-2e` (e.g. `alice.smith` appears as `alice-2esmith`)
 
-## Requirements
+## Install
 
-- Docker (the tool shells out to `docker volume` and `docker run`)
-- Python 3.10+ with `rich>=13` and `textual>=0.80`
+Needs Docker (the tool shells out to `docker volume` and `docker run`) and Python 3.10+;
+`rich>=13` and `textual>=0.80` come with it.
 
-The script carries an inline dependency block and a `uv run --script` shebang, so
-the simplest invocation auto-installs its dependencies:
+Install from PyPI and run the CLI:
+
+```bash
+pip install docker-volume-toolkit
+docker-volume-toolkit            # interactive TUI
+docker-volume-toolkit --help     # CLI flags
+```
+
+Or skip installation entirely - the script carries an inline dependency block and a
+`uv run --script` shebang, so it auto-installs its own dependencies on first run:
 
 ```bash
 ./migrate_volumes.py

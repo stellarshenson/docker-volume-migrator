@@ -1,0 +1,16 @@
+# Claude Code Journal
+
+This journal tracks substantive work on docker-volume-toolkit - a small toolkit for
+Docker volumes (CLI + Textual TUI); its first command copies volumes across a
+name-prefix change.
+
+---
+
+1. **Task - Standalone repo created** (v1.2.2): split the volume migrator out of the copier-stellars-jupyterhub-ds template's `extra/` into its own GitHub project so deployments pull it fresh, decoupled from the template tag<br>
+   **Result**: Created public `stellarshenson/docker-volume-migrator` via the GitHub REST API (`gh` absent; token from `~/.git-credentials`) - `migrate_volumes.py` (matches every volume named `{from_prefix}{tail}`, copies to `{to_prefix}{tail}` via a disposable `alpine` `rsync -aAX` container, leaving sources intact for verification), a generic README with the designer / plan / execution TUI screenshots, and an MIT LICENSE. The tool runs three ways: the `uv run --script` shebang (inline PEP 723 deps `rich>=13` + `textual>=0.80`), pip-installed deps, or bare python with a preflight dependency check.
+
+2. **Task - Package for PyPI** (v1.2.2): make the migrator pip-installable as a single CLI (pyproject.toml + Makefile to publish) while keeping the `uv run --script` shebang<br>
+   **Result**: Added `pyproject.toml` (hatchling), a self-documenting `Makefile`, and `.gitignore`; `migrate_volumes.py` left byte-for-byte unchanged. Hatchling single-sources the version from the script's `VERSION = "1.2.2"` via `[tool.hatch.version]` regex so the TUI header and dist version never drift; `[project.scripts] docker-volume-migrator = migrate_volumes:main` exposes the CLI; the lone top-level module is whitelisted in `[tool.hatch.build.targets.wheel]`. Deps `rich`/`textual` are dual-sourced (pyproject + PEP 723 inline block) on purpose. Makefile does build/check/publish/clean/version/tag via `uv build` + `uv publish`. README gained PyPI / downloads / python / license badges and a `pip install` path. Verified: `uv build` -> sdist+wheel, `twine check` PASSED, clean-venv install runs `docker-volume-migrator --help` (exit 0), `pip show` = 1.2.2, shebang path still works. First PyPI upload blocked: the name `docker-volume-migrator` is already taken on PyPI.
+
+3. **Task - Rebrand to docker-volume-toolkit + publish** (v1.2.2): `docker-volume-migrator` was already taken on PyPI (djbios's SSH tool), so renamed the project to an available umbrella name and shipped it<br>
+   **Result**: Renamed the PyPI distribution, the CLI command, and the GitHub repo to `docker-volume-toolkit` - an umbrella name chosen so future subcommands (list / prune / backup) can land without another rename. Updated `pyproject.toml` (name/scripts/urls), README (title/badges/install/command), and this journal. GitHub repo `stellarshenson/docker-volume-migrator` renamed via the REST API (`PATCH /repos`); the submodule `origin` remote re-pointed. Built `docker_volume_toolkit-1.2.2` (wheel + sdist), `twine check` PASSED, uploaded to PyPI via twine (`~/.pypirc` token) - live at https://pypi.org/project/docker-volume-toolkit/1.2.2/. `migrate_volumes.py` still byte-for-byte unchanged; version single-sourced from its `VERSION = "1.2.2"`.

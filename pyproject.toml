@@ -1,0 +1,51 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "docker-volume-toolkit"
+dynamic = ["version"]
+description = "Docker volume toolkit - copy/migrate volumes across a name-prefix change (CLI + interactive TUI)"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "stellarshenson", email = "konrad.jelen@gmail.com" }]
+keywords = ["docker", "volume", "toolkit", "migration", "rsync", "tui", "cli", "devops"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: System :: Systems Administration",
+    "Topic :: Utilities",
+]
+# Mirrors the inline PEP 723 block in migrate_volumes.py - keep the two in sync.
+dependencies = ["rich>=13", "textual>=0.80"]
+
+[project.urls]
+Homepage = "https://github.com/stellarshenson/docker-volume-toolkit"
+Repository = "https://github.com/stellarshenson/docker-volume-toolkit"
+Issues = "https://github.com/stellarshenson/docker-volume-toolkit/issues"
+
+[project.scripts]
+docker-volume-toolkit = "migrate_volumes:main"
+
+# Single-source the version from the script's VERSION constant (also shown in the
+# TUI header), so the package and the tool never drift.
+[tool.hatch.version]
+path = "migrate_volumes.py"
+pattern = 'VERSION = "(?P<version>[^"]+)"'
+
+# Single top-level module whose name differs from the distribution name, so it
+# must be listed explicitly.
+[tool.hatch.build.targets.wheel]
+include = ["migrate_volumes.py"]
+
+[tool.hatch.build.targets.sdist]
+include = ["migrate_volumes.py", "README.md", "LICENSE", ".resources"]
