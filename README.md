@@ -92,3 +92,7 @@ Without `uv`, install the dependencies once and run with any Python:
 pip install rich textual
 python migrate_volumes.py --help
 ```
+
+---
+
+*It copies volumes from one prefix to another, and then it has no further reason to exist. You will run it twice and forget it. The volumes never say thank you.*
