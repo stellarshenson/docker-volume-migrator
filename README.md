@@ -1,27 +1,25 @@
 # docker-volume-migrator
 
-A terminal tool that copies Docker volumes from one name prefix to another. It
+A small command-line tool that copies Docker volumes from one name prefix to another. It
 matches every volume named `{from_prefix}{tail}` and copies it to
 `{to_prefix}{tail}`, preserving the tail (`_home`, `_workspace`, `_certs`, a
 per-user suffix, anything that follows the prefix). Run it from the host that
 owns the Docker volumes; it copies rather than renames, so the originals stay in
 place until you have verified the result.
 
-## Screenshots
-
-The interactive TUI walks through three stages - designer, plan, execution.
+Run with no arguments for the interactive TUI - designer, plan, execution:
 
 ![Designer](.resources/designer.png)
 
-*Set the FROM and TO prefixes, an optional filter, the worker count and overwrite mode; the BEFORE and AFTER panes preview the volumes that match.*
+*Set the FROM and TO prefixes, an optional whole-name filter, the worker count, and the overwrite / remove-source toggles; a live counter shows how many discovered volumes match (`5 of 20`) and the BEFORE / AFTER panes preview the exact source and destination names.*
 
 ![Migration plan](.resources/plan.png)
 
-*Review every matched volume and its `source → destination` mapping before anything is copied.*
+*Review each matched volume and its `source → destination` mapping; toggle rows with Space (a = all, n = none) and press Enter to run only the selected copies.*
 
-![Selecting rows](.resources/plan-selected.png)
+![Execution](.resources/execution.png)
 
-*Toggle individual rows with Space (a = all, n = none), then press Enter to run only the selected copies.*
+*Live progress during the copy - an overall bar plus a per-volume bar for each parallel worker, moving through discovery and transfer.*
 
 ## When you need it
 
