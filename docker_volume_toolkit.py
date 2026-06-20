@@ -162,7 +162,7 @@ PASTEL_THEME = Theme({
 
 console = Console(theme=PASTEL_THEME)
 
-VERSION = "1.2.2"
+VERSION = "1.2.3"
 APP_TITLE = "Docker Volume Toolkit"
 
 # Shared top header bar: app name on the left, version pinned to the right
