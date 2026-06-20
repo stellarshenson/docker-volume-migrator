@@ -9,15 +9,15 @@ place until you have verified the result.
 
 Run with no arguments for the interactive TUI - designer, plan, execution:
 
-![Designer](.resources/designer.png)
+![Designer](.resources/1-designer.png)
 
 *Set the FROM and TO prefixes, an optional whole-name filter, the worker count, and the overwrite / remove-source toggles; a live counter shows how many discovered volumes match (`5 of 20`) and the BEFORE / AFTER panes preview the exact source and destination names.*
 
-![Migration plan](.resources/plan.png)
+![Migration plan](.resources/2-plan.png)
 
 *Review each matched volume and its `source → destination` mapping; toggle rows with Space (a = all, n = none) and press Enter to run only the selected copies.*
 
-![Execution](.resources/execution.png)
+![Execution](.resources/3-execution.png)
 
 *Live progress during the copy - an overall bar plus a per-volume bar for each parallel worker, moving through discovery and transfer.*
 
