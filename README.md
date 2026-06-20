@@ -3,10 +3,25 @@
 A terminal tool that copies Docker volumes from one name prefix to another. It
 matches every volume named `{from_prefix}{tail}` and copies it to
 `{to_prefix}{tail}`, preserving the tail (`_home`, `_workspace`, `_certs`, a
-per-user suffix, anything that follows the prefix).
+per-user suffix, anything that follows the prefix). Run it from the host that
+owns the Docker volumes; it copies rather than renames, so the originals stay in
+place until you have verified the result.
 
-Run it from the host that owns the Docker volumes. It copies rather than
-renames, so the originals stay in place until you have verified the result.
+## Screenshots
+
+The interactive TUI walks through three stages - designer, plan, execution.
+
+![Designer](.resources/designer.png)
+
+*Set the FROM and TO prefixes, an optional filter, the worker count and overwrite mode; the BEFORE and AFTER panes preview the volumes that match.*
+
+![Migration plan](.resources/plan.png)
+
+*Review every matched volume and its `source → destination` mapping before anything is copied.*
+
+![Selecting rows](.resources/plan-selected.png)
+
+*Toggle individual rows with Space (a = all, n = none), then press Enter to run only the selected copies.*
 
 ## When you need it
 
