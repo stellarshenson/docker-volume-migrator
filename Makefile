@@ -2,7 +2,7 @@
 .PHONY: help install build check publish publish-test clean version tag
 
 # Version is single-sourced from the script's VERSION constant.
-VERSION := $(shell sed -n 's/^VERSION = "\(.*\)"/\1/p' migrate_volumes.py)
+VERSION := $(shell sed -n 's/^VERSION = "\(.*\)"/\1/p' docker_volume_toolkit.py)
 
 ## install for local development (editable)
 install:

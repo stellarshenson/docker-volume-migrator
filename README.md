@@ -45,20 +45,20 @@ rename.
 Run with no arguments for the interactive TUI (designer → plan → execution):
 
 ```bash
-./migrate_volumes.py
+./docker_volume_toolkit.py
 ```
 
 Or drive it entirely from the command line:
 
 ```bash
 # preview the mapping without copying
-./migrate_volumes.py --from myproject_ --to mynewproject_ --dry-run
+./docker_volume_toolkit.py --from myproject_ --to mynewproject_ --dry-run
 
 # copy, skipping the prompt
-./migrate_volumes.py --from myproject_ --to mynewproject_ --yes
+./docker_volume_toolkit.py --from myproject_ --to mynewproject_ --yes
 
 # only the cert volumes, four parallel workers
-./migrate_volumes.py --from myproject_ --to mynewproject_ --filter '_certs$' --workers 4
+./docker_volume_toolkit.py --from myproject_ --to mynewproject_ --filter '_certs$' --workers 4
 ```
 
 ## Options
@@ -96,14 +96,14 @@ Or skip installation entirely - the script carries an inline dependency block an
 `uv run --script` shebang, so it auto-installs its own dependencies on first run:
 
 ```bash
-./migrate_volumes.py
+./docker_volume_toolkit.py
 ```
 
 Without `uv`, install the dependencies once and run with any Python:
 
 ```bash
 pip install rich textual
-python migrate_volumes.py --help
+python docker_volume_toolkit.py --help
 ```
 
 ---

@@ -14,10 +14,10 @@ rsync --delete; the source volume is left intact for verification
 before manual removal.
 
 Usage:
-  ./migrate_volumes.py --from stellars-tech-ai-lab_ --to stellars-tech-ai-hub_
-  ./migrate_volumes.py --from stellars-tech-ai-lab_ --to stellars-tech-ai-hub_ --filter '_certs$'
-  ./migrate_volumes.py --from stellars-tech-ai-lab_ --to stellars-tech-ai-hub_ --dry-run
-  ./migrate_volumes.py --from stellars-tech-ai-lab_ --to stellars-tech-ai-hub_ --yes
+  ./docker_volume_toolkit.py --from stellars-tech-ai-lab_ --to stellars-tech-ai-hub_
+  ./docker_volume_toolkit.py --from stellars-tech-ai-lab_ --to stellars-tech-ai-hub_ --filter '_certs$'
+  ./docker_volume_toolkit.py --from stellars-tech-ai-lab_ --to stellars-tech-ai-hub_ --dry-run
+  ./docker_volume_toolkit.py --from stellars-tech-ai-lab_ --to stellars-tech-ai-hub_ --yes
 
 Note: Docker encodes '.' in volume names as '-2e' (e.g. 'alice.smith'
 appears as 'alice-2esmith'). The --filter regex matches against the
@@ -64,11 +64,11 @@ def _preflight() -> None:
     missing = [spec for mod, spec in required.items() if not _present(mod)]
     if not missing:
         return
-    print("migrate_volumes.py is missing required packages:", file=sys.stderr)
+    print("docker_volume_toolkit.py is missing required packages:", file=sys.stderr)
     for spec in missing:
         print(f"  - {spec}", file=sys.stderr)
     print(f"\nInstall with:  pip install {' '.join(missing)}", file=sys.stderr)
-    print("Or run via uv:  ./scripts/migrate_volumes.py  (auto-installs)",
+    print("Or run via uv:  ./docker_volume_toolkit.py  (auto-installs)",
           file=sys.stderr)
     sys.exit(1)
 
@@ -163,7 +163,7 @@ PASTEL_THEME = Theme({
 console = Console(theme=PASTEL_THEME)
 
 VERSION = "1.2.2"
-APP_TITLE = "Docker Volume Migrator"
+APP_TITLE = "Docker Volume Toolkit"
 
 # Shared top header bar: app name on the left, version pinned to the right
 # corner. Embedded into each screen's CSS via {HEADER_CSS}.

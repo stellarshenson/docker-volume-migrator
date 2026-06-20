@@ -25,7 +25,7 @@ classifiers = [
     "Topic :: System :: Systems Administration",
     "Topic :: Utilities",
 ]
-# Mirrors the inline PEP 723 block in migrate_volumes.py - keep the two in sync.
+# Mirrors the inline PEP 723 block in docker_volume_toolkit.py - keep the two in sync.
 dependencies = ["rich>=13", "textual>=0.80"]
 
 [project.urls]
@@ -34,18 +34,18 @@ Repository = "https://github.com/stellarshenson/docker-volume-toolkit"
 Issues = "https://github.com/stellarshenson/docker-volume-toolkit/issues"
 
 [project.scripts]
-docker-volume-toolkit = "migrate_volumes:main"
+docker-volume-toolkit = "docker_volume_toolkit:main"
 
 # Single-source the version from the script's VERSION constant (also shown in the
 # TUI header), so the package and the tool never drift.
 [tool.hatch.version]
-path = "migrate_volumes.py"
+path = "docker_volume_toolkit.py"
 pattern = 'VERSION = "(?P<version>[^"]+)"'
 
 # Single top-level module whose name differs from the distribution name, so it
 # must be listed explicitly.
 [tool.hatch.build.targets.wheel]
-include = ["migrate_volumes.py"]
+include = ["docker_volume_toolkit.py"]
 
 [tool.hatch.build.targets.sdist]
-include = ["migrate_volumes.py", "README.md", "LICENSE", ".resources"]
+include = ["docker_volume_toolkit.py", "README.md", "LICENSE", ".resources"]
